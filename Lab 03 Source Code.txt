@@ -1,0 +1,173 @@
+-----------------------------------
+Q1
+INCLUDE Irvine32.inc
+
+.data
+var1 SBYTE ?
+var2 SWORD -45
+
+.code
+main PROC
+
+exit
+main ENDP
+
+END main
+----------------------------------
+Q2
+INCLUDE Irvine32.inc
+
+.data
+var3 SWORD -32768
+
+.code
+main PROC
+
+exit
+main ENDP
+
+END main
+--------------------------------
+Q3
+INCLUDE Irvine32.inc
+
+.data
+rollno BYTE "24K-0768 ", 0
+v1 BYTE 32
+v2 BYTE 5
+v3 BYTE 17
+v4 BYTE 24
+v5 BYTE 12
+
+.code
+main PROC
+
+exit
+main ENDP
+
+END main
+-------------------------------
+Q4
+INCLUDE Irvine32.inc
+
+.data
+
+v1 DWORD 012h
+v2 DWORD 0Ah
+v3 DWORD 025h
+v4 DWORD 070h
+
+.code
+
+main PROC
+
+mov eax, v1
+sub eax, v2
+
+mov ecx, v1
+add ecx, v2
+
+sub eax, ecx
+
+add eax, v4
+
+add eax, v3
+
+mov ebx, eax
+
+call DumpRegs
+exit
+main ENDP
+
+END main
+------------------------------
+Q5
+INCLUDE Irvine32.inc
+
+.data
+
+v1 BYTE 00010010b 
+v2 BYTE 00001010b 
+v3 BYTE 00100101b 
+v4 BYTE 01110000b 
+
+.code
+main PROC
+
+mov al, v1
+sub al, v2
+
+mov bl, v1
+add bl, v2
+
+sub al, bl
+
+add al, v4
+
+add al, v3
+
+mov bl, al
+
+
+call DumpRegs
+exit
+main ENDP
+
+END main
+-------------------------------
+Q6
+INCLUDE Irvine32.inc
+
+.data
+
+bArray BYTE 15, 20, 25
+
+.code
+
+exit
+main ENDP
+
+END main
+------------------------------
+Q7
+INCLUDE Irvine32.inc
+
+.data
+
+dArray DWORD 50 DUP(?)
+
+.code
+main PROC
+
+exit
+main ENDP
+
+END main
+------------------------------
+Q8
+INCLUDE Irvine32.inc
+
+.data
+
+string BYTE 300 DUP(COAL)
+
+exit
+main ENDP
+
+END main
+------------------------------
+Q9
+INCLUDE Irvine32.inc
+
+.data
+
+bArray BYTE 10 DUP(0)
+
+.code
+main PROC
+
+exit
+main ENDP
+
+END main
+------------------------------
