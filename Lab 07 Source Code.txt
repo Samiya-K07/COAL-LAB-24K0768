@@ -1,0 +1,417 @@
+TASK 01
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+prompt    BYTE "Please input an integer: ",0
+msg_equal BYTE "All integers are equal",0Dh,0Ah,0
+msg_noteq BYTE "Not all integers are equal",0Dh,0Ah,0
+
+a_val DWORD ?
+b_val DWORD ?
+c_val DWORD ?
+d_val DWORD ?
+
+.code
+main PROC
+    mov edx, OFFSET prompt
+    call WriteString
+    call ReadInt
+    mov a_val, eax
+
+    mov edx, OFFSET prompt
+    call WriteString
+    call ReadInt
+    mov b_val, eax
+
+    mov edx, OFFSET prompt
+    call WriteString
+    call ReadInt
+    mov c_val, eax
+
+    mov edx, OFFSET prompt
+    call WriteString
+    call ReadInt
+    mov d_val, eax
+
+    mov eax, a_val
+    cmp eax, b_val
+    jne NOT_EQUAL
+    cmp eax, c_val
+    jne NOT_EQUAL
+    cmp eax, d_val
+    jne NOT_EQUAL
+
+    mov edx, OFFSET msg_equal
+    call WriteString
+    jmp DONE
+
+NOT_EQUAL:
+    mov edx, OFFSET msg_noteq
+    call WriteString
+
+DONE:
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 02
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+numsArr SWORD 0, 0, 0, -150, 120, 35, -12, 66, 4, 0
+cnt = LENGTHOF numsArr
+
+foundMsg BYTE "First non-zero value: ",0
+noMsg BYTE "No non-zero value found.",0Dh,0Ah,0
+
+.code
+main PROC
+    mov esi, OFFSET numsArr
+    mov ecx, cnt
+
+search_loop:
+    movsx eax, WORD PTR [esi]  
+    cmp eax, 0
+    jne PRINT_FOUND
+    add esi, TYPE numsArr
+    loop search_loop
+
+    mov edx, OFFSET noMsg
+    call WriteString
+    call Crlf
+    exit
+
+PRINT_FOUND:
+    mov edx, OFFSET foundMsg
+    call WriteString
+    call WriteInt
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 03
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+tempArr SWORD 0, 0, 0, -150, 120, 35, -12, 66, 4, 0
+arrLen = LENGTHOF tempArr
+
+baseVar DWORD 5        
+edxTemp DWORD ?
+resultX DWORD ?        
+
+msgTrue  BYTE "x = 0",0Dh,0Ah,"Condition is True",0
+msgFalse BYTE "x = 1",0Dh,0Ah,"Condition is False",0
+
+.code
+main PROC
+    mov eax, baseVar        
+    mov edxTemp, eax
+    inc edxTemp            
+    mov edx, edxTemp        
+    mov ecx, arrLen         
+
+    
+    mov eax, baseVar
+    cmp eax, ecx
+    jge ELSE_BLOCK          
+
+    cmp ecx, edx
+    jl ELSE_BLOCK          
+
+    
+    mov resultX, 0
+    mov edx, OFFSET msgTrue
+    call WriteString
+    jmp ENDALL
+
+ELSE_BLOCK:
+    mov resultX, 1
+    mov edx, OFFSET msgFalse
+    call WriteString
+
+ENDALL:
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 04
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+counter DWORD 0
+
+msgHello  BYTE "Hello World!",0Dh,0Ah,0
+msgCondF  BYTE "Condition is False!",0Dh,0Ah,0
+
+.code
+main PROC
+    mov eax, counter
+
+WHILE_TOP:
+    cmp eax, 10
+    jg WHILE_END
+
+    cmp eax, 5
+    jl PRINT_HELLO
+
+    mov edx, OFFSET msgCondF
+    call WriteString
+    jmp INC_AND_CONT
+
+PRINT_HELLO:
+    mov edx, OFFSET msgHello
+    call WriteString
+
+INC_AND_CONT:
+    inc eax
+    jmp WHILE_TOP
+
+WHILE_END:
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 05
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+promptDay BYTE "Enter day number (1-7): ",0
+errMsg    BYTE "Invalid day number!",0Dh,0Ah,0
+
+d1 BYTE "Monday",0Dh,0Ah,0
+d2 BYTE "Tuesday",0Dh,0Ah,0
+d3 BYTE "Wednesday",0Dh,0Ah,0
+d4 BYTE "Thursday",0Dh,0Ah,0
+d5 BYTE "Friday",0Dh,0Ah,0
+d6 BYTE "Saturday",0Dh,0Ah,0
+d7 BYTE "Sunday",0Dh,0Ah,0
+
+dayNum DWORD ?
+
+.code
+main PROC
+    mov edx, OFFSET promptDay
+    call WriteString
+    call ReadInt
+    mov dayNum, eax
+
+    cmp eax, 1
+    je IS1
+    cmp eax, 2
+    je IS2
+    cmp eax, 3
+    je IS3
+    cmp eax, 4
+    je IS4
+    cmp eax, 5
+    je IS5
+    cmp eax, 6
+    je IS6
+    cmp eax, 7
+    je IS7
+
+    mov edx, OFFSET errMsg
+    call WriteString
+    jmp END_DAY
+
+IS1:
+    mov edx, OFFSET d1
+    call WriteString
+    jmp END_DAY
+IS2:
+    mov edx, OFFSET d2
+    call WriteString
+    jmp END_DAY
+IS3:
+    mov edx, OFFSET d3
+    call WriteString
+    jmp END_DAY
+IS4:
+    mov edx, OFFSET d4
+    call WriteString
+    jmp END_DAY
+IS5:
+    mov edx, OFFSET d5
+    call WriteString
+    jmp END_DAY
+IS6:
+    mov edx, OFFSET d6
+    call WriteString
+    jmp END_DAY
+IS7:
+    mov edx, OFFSET d7
+    call WriteString
+
+END_DAY:
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 06
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+askChar BYTE "Enter a character: ",0
+vowelList BYTE "AEIOUaeiou",0
+
+vowelMsg BYTE "It is a vowel",0Dh,0Ah,0
+consMsg  BYTE "It is a consonant",0Dh,0Ah,0
+
+.code
+main PROC
+    mov edx, OFFSET askChar
+    call WriteString
+
+    call ReadChar      
+    mov bl, al          
+
+   
+    mov al, bl
+    call WriteChar
+    call Crlf
+
+    mov esi, OFFSET vowelList
+
+chk_loop:
+    mov al, [esi]
+    cmp al, 0
+    je NOT_VOWEL
+    cmp bl, al
+    je IS_VOWEL
+    inc esi
+    jmp chk_loop
+
+IS_VOWEL:
+    mov edx, OFFSET vowelMsg
+    call WriteString
+    jmp DONE6
+
+NOT_VOWEL:
+    mov edx, OFFSET consMsg
+    call WriteString
+
+DONE6:
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 07
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+listArr SWORD 11, 43, -7, 9, 12, 90, 25, 0
+lenList = LENGTHOF listArr
+
+askVal BYTE "Enter value to search: ",0
+foundMsg BYTE "Value found at index: ",0
+notFound BYTE "Value not found",0Dh,0Ah,0
+
+.code
+main PROC
+    mov edx, OFFSET askVal
+    call WriteString
+    call ReadInt
+    mov bx, ax           
+
+    mov esi, OFFSET listArr
+    mov ecx, lenList
+    xor edi, edi          
+
+search:
+    mov ax, [esi]         
+    cmp ax, bx
+    je PRINT_INDEX
+    add esi, TYPE listArr
+    inc edi
+    loop search
+
+    mov edx, OFFSET notFound
+    call WriteString
+    call Crlf
+    exit
+
+PRINT_INDEX:
+    mov edx, OFFSET foundMsg
+    call WriteString
+    mov eax, edi
+    call WriteInt
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
+
+TASK 08
+----------------------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+arr WORD 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+n = LENGTHOF arr
+
+sortedMsg BYTE "Sorted array: ",0Dh,0Ah,0
+
+.code
+main PROC
+    mov ecx, n           
+
+outer_loop:
+    mov esi, OFFSET arr
+    mov ebx, n
+    dec ebx             
+
+inner_loop:
+    mov ax, [esi]
+    mov dx, [esi+2]
+    cmp ax, dx
+    jle no_swap_here
+
+    mov [esi], dx
+    mov [esi+2], ax
+
+no_swap_here:
+    add esi, 2
+    dec ebx
+    jnz inner_loop
+
+    loop outer_loop
+
+    mov edx, OFFSET sortedMsg
+    call WriteString
+
+    mov esi, OFFSET arr
+    mov ecx, n
+
+print_loop:
+    movzx eax, WORD PTR [esi]
+    call WriteInt
+    mov al, ' '
+    call WriteChar
+    add esi, 2
+    loop print_loop
+
+    call Crlf
+    exit
+main ENDP
+END main
+----------------------------------------------------------
