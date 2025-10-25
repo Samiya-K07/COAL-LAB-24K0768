@@ -1,0 +1,342 @@
+TASK 01
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+srcArr DWORD 1,2,3,4,5,6,7,8,9,10
+destArr DWORD 10 DUP(?)
+txt1 BYTE "Original Array:",0
+txt2 BYTE "Reversed Array:",0
+
+.code
+main PROC
+
+mov ecx, LENGTHOF srcArr
+mov esi, OFFSET srcArr
+
+loadLoop:
+    mov eax, [esi]
+    push eax
+    add esi, TYPE DWORD
+loop loadLoop
+
+mov ecx, LENGTHOF destArr
+mov edi, OFFSET destArr
+
+storeLoop:
+    pop eax
+    mov [edi], eax
+    add edi, TYPE DWORD
+loop storeLoop
+
+mov edx, OFFSET txt1
+call WriteString
+call Crlf
+
+mov ecx, LENGTHOF srcArr
+mov esi, OFFSET srcArr
+
+prt1:
+    mov eax, [esi]
+    call WriteInt
+    add esi, TYPE DWORD
+loop prt1
+
+call Crlf
+mov edx, OFFSET txt2
+call WriteString
+call Crlf
+
+mov ecx, LENGTHOF destArr
+mov esi, OFFSET destArr
+
+prt2:
+    mov eax, [esi]
+    call WriteInt
+    add esi, TYPE DWORD
+loop prt2
+
+call Crlf
+exit
+main ENDP
+END main
+----------------------------------------------
+
+TASK 02
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+ans DWORD ?
+
+.code
+main PROC
+
+push 10
+push 20
+push 30
+
+pop eax
+pop ebx
+add eax, ebx
+
+pop ebx
+add eax, ebx
+
+mov ans, eax
+mov eax, ans
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+END main
+----------------------------------------------
+
+TASK 03
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+A DWORD 2,4,6,8,10
+B DWORD 5,7,9,11,13
+lenA = LENGTHOF A
+lenB = LENGTHOF B
+txtA BYTE "Sum of A: ",0
+txtB BYTE "Sum of B: ",0
+txtT BYTE "Combined Sum: ",0
+sumA DWORD ?
+sumB DWORD ?
+sumTotal DWORD ?
+
+.code
+main PROC
+    call doTotal
+exit
+main ENDP
+
+doTotal PROC
+    call calcA
+    call calcB
+
+    mov eax, sumA
+    add eax, sumB
+    mov sumTotal, eax
+
+    mov edx, OFFSET txtT
+    call WriteString
+    mov eax, sumTotal
+    call WriteDec
+    call Crlf
+ret
+doTotal ENDP
+
+calcA PROC
+    mov ecx, lenA
+    mov esi, OFFSET A
+    xor eax, eax
+
+L1:
+    add eax, [esi]
+    add esi, TYPE A
+loop L1
+
+    mov sumA, eax
+    mov edx, OFFSET txtA
+    call WriteString
+    mov eax, sumA
+    call WriteDec
+    call Crlf
+ret
+calcA ENDP
+
+calcB PROC
+    mov ecx, lenB
+    mov esi, OFFSET B
+    xor eax, eax
+
+L2:
+    add eax, [esi]
+    add esi, TYPE B
+loop L2
+
+    mov sumB, eax
+    mov edx, OFFSET txtB
+    call WriteString
+    mov eax, sumB
+    call WriteDec
+    call Crlf
+ret
+calcB ENDP
+
+END main
+----------------------------------------------
+
+TASK 04
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+m1 BYTE "Enter a number:",0
+m2 BYTE "The sum is:",0
+value DWORD ?
+ans DWORD ?
+
+.code
+main PROC
+
+mov edx, OFFSET m1
+call WriteString
+call ReadInt
+mov value, eax
+
+mov eax, value
+call sumUpTo
+mov ans, eax
+
+mov edx, OFFSET m2
+call WriteString
+mov eax, ans
+call WriteInt
+call Crlf
+
+exit
+main ENDP
+
+sumUpTo PROC
+    push ebx
+    mov ebx, eax
+    xor eax, eax
+    mov ecx, ebx
+Sloop:
+    add eax, ecx
+loop Sloop
+    pop ebx
+ret
+sumUpTo ENDP
+END main
+----------------------------------------------
+
+TASK 05
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+prompt BYTE "Enter a string:",0
+outMsg BYTE "Reversed String:",0
+length DWORD ?
+strIn BYTE 50 DUP(?)
+strOut BYTE 50 DUP(?)
+
+.code
+main PROC
+
+mov edx, OFFSET prompt
+call WriteString
+mov edx, OFFSET strIn
+mov ecx, SIZEOF strIn
+call ReadString
+mov length, eax
+
+mov esi, OFFSET strIn
+mov ecx, eax
+
+pushChars:
+    mov al, [esi]
+    push eax
+    inc esi
+loop pushChars
+
+mov ecx, length
+mov edi, OFFSET strOut
+
+popChars:
+    pop eax
+    mov [edi], al
+    inc edi
+loop popChars
+
+mov edx, OFFSET outMsg
+call WriteString
+mov edx, OFFSET strOut
+call WriteString
+call Crlf
+
+exit
+main ENDP
+END main
+----------------------------------------------
+
+TASK 06
+----------------------------------------------
+INCLUDE Irvine32.inc
+
+.data
+t1 BYTE "Enter side A:",0
+t2 BYTE "Enter side B:",0
+t3 BYTE "Enter side C:",0
+msgEQ BYTE "Equilateral",0
+msgIS BYTE "Isosceles",0
+msgSC BYTE "Scalene",0
+a DWORD ?
+b DWORD ?
+c DWORD ?
+
+.code
+main PROC
+mov edx, OFFSET t1
+call WriteString
+call ReadInt
+mov a, eax
+
+mov edx, OFFSET t2
+call WriteString
+call ReadInt
+mov b, eax
+
+mov edx, OFFSET t3
+call WriteString
+call ReadInt
+mov c, eax
+
+call classify
+exit
+main ENDP
+
+classify PROC
+mov eax, a
+mov ebx, b
+mov ecx, c
+
+cmp eax, ebx
+jne notEqual
+cmp eax, ecx
+jne notEqual
+
+mov edx, OFFSET msgEQ
+call WriteString
+call Crlf
+ret
+
+notEqual:
+cmp eax, ebx
+je Iso
+cmp eax, ecx
+je Iso
+cmp ebx, ecx
+je Iso
+
+mov edx, OFFSET msgSC
+call WriteString
+call Crlf
+ret
+
+Iso:
+mov edx, OFFSET msgIS
+call WriteString
+call Crlf
+ret
+
+classify ENDP
+END main
+----------------------------------------------
