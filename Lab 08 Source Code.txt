@@ -280,7 +280,7 @@ msgIS BYTE "Isosceles",0
 msgSC BYTE "Scalene",0
 a DWORD ?
 b DWORD ?
-c DWORD ?
+sideC DWORD ?
 
 .code
 main PROC
@@ -297,7 +297,7 @@ mov b, eax
 mov edx, OFFSET t3
 call WriteString
 call ReadInt
-mov c, eax
+mov sideC, eax
 
 call classify
 exit
@@ -306,7 +306,7 @@ main ENDP
 classify PROC
 mov eax, a
 mov ebx, b
-mov ecx, c
+mov ecx, sideC
 
 cmp eax, ebx
 jne notEqual
@@ -340,4 +340,5 @@ ret
 classify ENDP
 END main
 ----------------------------------------------
+
 
