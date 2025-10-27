@@ -1,0 +1,251 @@
+TASK 01
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+msgIn BYTE "Enter a number: ",0
+msgOut BYTE "Result = ",0
+.code
+main PROC
+    mov edx,OFFSET msgIn
+    call WriteString
+    call ReadInt
+    mov ebx,eax
+    shl eax,4
+    mov ecx,ebx
+    shl ecx,2
+    add eax,ecx
+    add eax,ebx
+    mov edx,OFFSET msgOut
+    call WriteString
+    call WriteInt
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 02
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+msgOut BYTE "EAX = ",0
+.code
+main PROC
+    mov ax,-128
+    movzx eax,ax
+    shl eax,8
+    rol eax,8
+    sar eax,16
+    mov edx,OFFSET msgOut
+    call WriteString
+    call WriteInt
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 03
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+bMinutes BYTE ?
+msgOut BYTE "Minutes = ",0
+.code
+main PROC
+    mov ax,0ABCDh
+    mov bx,ax
+    shr bx,5
+    and bl,3Fh
+    mov bMinutes,bl
+    mov edx,OFFSET msgOut
+    call WriteString
+    movzx eax,bMinutes
+    call WriteInt
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 04
+-----------------------------------------------------------
+WITHOUT SHRD
+
+INCLUDE Irvine32.inc
+.data
+msgAX BYTE "AX = ",0
+msgBX BYTE "BX = ",0
+.code
+main PROC
+    mov ax,1234h
+    mov bx,5678h
+    rcr ax,1
+    rcl bx,1
+    mov edx,OFFSET msgAX
+    call WriteString
+    movzx eax,ax
+    call WriteInt
+    call CrLf
+    mov edx,OFFSET msgBX
+    call WriteString
+    movzx eax,bx
+    call WriteInt
+    exit
+main ENDP
+END main
+
+
+WITH SHRD
+INCLUDE Irvine32.inc
+.data
+msgAX BYTE "AX = ",0
+msgBX BYTE "BX = ",0
+.code
+main PROC
+    mov ax,1234h
+    mov bx,5678h
+
+    ror ax,1
+    shrd bx,ax,1
+
+    mov edx,OFFSET msgAX
+    call WriteString
+    movzx eax,ax
+    call WriteInt
+    call CrLf
+
+    mov edx,OFFSET msgBX
+    call WriteString
+    movzx eax,bx
+    call WriteInt
+
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 05
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+val1 DWORD 20
+val2 DWORD 10
+val3 DWORD 5
+msgOut BYTE "Result = ",0
+.code
+main PROC
+    mov eax,val2
+    cdq
+    idiv val3
+    push eax
+    mov eax,val1
+    cdq
+    idiv val2
+    mov ecx,eax
+    pop eax
+    imul eax,ecx
+    mov val1,eax
+    mov edx,OFFSET msgOut
+    call WriteString
+    call WriteInt
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 06
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+msgIn BYTE "Enter a number: ",0
+msgEven BYTE "The number is even!",0
+msgOdd BYTE "The number is odd!",0
+.code
+main PROC
+    mov edx,OFFSET msgIn
+    call WriteString
+    call ReadInt
+    test eax,1
+    jz evenNum
+    mov edx,OFFSET msgOdd
+    call WriteString
+    jmp endProgram
+evenNum:
+    mov edx,OFFSET msgEven
+    call WriteString
+endProgram:
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 07
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+msgIn BYTE "Enter a number: ",0
+msgPrime BYTE "The number is prime!",0
+msgNot BYTE "The number is Not prime!",0
+.code
+main PROC
+    mov edx,OFFSET msgIn
+    call WriteString
+    call ReadInt
+    mov ebx,eax
+    cmp ebx,2
+    jl notP
+    mov ecx,2
+chk:
+    mov eax,ebx
+    cdq
+    idiv ecx
+    cmp edx,0
+    je divF
+    inc ecx
+    cmp ecx,ebx
+    jl chk
+    mov edx,OFFSET msgPrime
+    call WriteString
+    jmp endProgram
+divF:
+    cmp ecx,ebx
+    je isP
+notP:
+    mov edx,OFFSET msgNot
+    call WriteString
+    jmp endProgram
+isP:
+    mov edx,OFFSET msgPrime
+    call WriteString
+endProgram:
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
+
+TASK 08
+-----------------------------------------------------------
+INCLUDE Irvine32.inc
+.data
+msgIn BYTE "Enter a number: ",0
+msgSq BYTE "Square = ",0
+msgCu BYTE "Cube = ",0
+.code
+main PROC
+    mov edx,OFFSET msgIn
+    call WriteString
+    call ReadInt
+    mov ebx,eax
+    mov edx,OFFSET msgSq
+    call WriteString
+    imul eax,eax
+    call WriteInt
+    call CrLf
+    mov eax,ebx
+    imul eax,eax
+    imul eax,ebx
+    mov edx,OFFSET msgCu
+    call WriteString
+    call WriteInt
+    exit
+main ENDP
+END main
+-----------------------------------------------------------
